@@ -214,9 +214,9 @@ replications_l1_bias <- function(df, true_effect){
 }
 
 replications_visual <- function(df, true_effect){
-  methods <- colnames(dr_bac_iv)
+  methods <- colnames(df)
   
-  dr_bac_iv %>%
+  df %>%
     summarize_all(~list(mean = mean(.x), lower = quantile(.x, .025), upper = quantile(.x, .975)) %>% unlist()) %>%
     mutate(quantity = c("mean", "lower", "upper")) %>%
     pivot_wider(values_from = all_of(methods), names_from = quantity) %>%
