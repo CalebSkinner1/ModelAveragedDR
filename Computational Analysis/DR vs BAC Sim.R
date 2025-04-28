@@ -3,6 +3,7 @@
 source("ModelAveragedDR/Computational Analysis/Sim Functions.R")
 
 # scenario 1 - instrumental variables
+
 alpha_iv <- c(1, 2, 3, .5, .5, .5, 0, 0, 0, 0)
 beta_iv <- c(0, 0, 0, .5, 1, 1.5, 0, 0, 0, 0)
 
@@ -23,6 +24,7 @@ toc()
 dr_bac_iv %>% replications_l1_bias(1)
 dr_bac_iv %>% replications_mean()
 dr_bac_iv %>% replications_visual(1)
+# MA-DR is better
 
 # scenario 2 - strong association with exposure, and weak association with outcome
 
@@ -45,5 +47,7 @@ toc()
 dr_bac_e %>% replications_l1_bias(1)
 dr_bac_e %>% replications_mean()
 dr_bac_e %>% replications_visual(1)
+
+# BAC is better
 
 

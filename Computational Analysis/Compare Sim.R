@@ -26,7 +26,7 @@ beta13 <- c(2, 2, 0, 0, 0)
 alpha14 <- c(.5, .4, .3, .2, .1)
 beta14 <- c(.5, 1, 1.5, 2, 2.5)
 
-# this takes ~30 minutes
+# this takes ~20 minutes
 tic()
 plan(multisession, workers = 4)
 
@@ -34,16 +34,15 @@ situation11_compare <- future_map(1:500, ~paper_sim(true_effect, n, p1, sigma1, 
                           .progress = TRUE,
                           .options = furrr_options(seed = TRUE)) %>%
   bind_rows()
-toc()
-situation12_compare <- future_map(1:500, ~paper_sim(true_effect, n, p1, sigma, alpha12, beta12, include_BAC = TRUE),
+situation12_compare <- future_map(1:500, ~paper_sim(true_effect, n, p1, sigma1, alpha12, beta12, include_BAC = TRUE),
                           .progress = TRUE,
                           .options = furrr_options(seed = TRUE)) %>%
   bind_rows()
-situation13_compare <- future_map(1:500, ~paper_sim(true_effect, n, p1, sigma, alpha13, beta13, include_BAC = TRUE),
+situation13_compare <- future_map(1:500, ~paper_sim(true_effect, n, p1, sigma1, alpha13, beta13, include_BAC = TRUE),
                           .progress = TRUE,
                           .options = furrr_options(seed = TRUE)) %>%
   bind_rows()
-situation14_compare <- future_map(1:500, ~paper_sim(true_effect, n, p1, sigma, alpha14, beta14, include_BAC = TRUE),
+situation14_compare <- future_map(1:500, ~paper_sim(true_effect, n, p1, sigma1, alpha14, beta14, include_BAC = TRUE),
                           .progress = TRUE,
                           .options = furrr_options(seed = TRUE)) %>%
   bind_rows()
