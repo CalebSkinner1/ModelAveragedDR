@@ -19,3 +19,5 @@ This script reproduces the simulations in Cefalu et al. (2017). The main objecti
 This script analyzes the methods in the presence of a known set of confounders that each have complex relationships with the outcome and exposure. After adding extra terms, I find the model averaging methods are much better at approximating the true confounding relationship than the model selection methods.
 
 # MA-DR vs BAC Sim.R
+
+In the first two simulations, the MA-DR and BAC estimators perform similarly. I emphasize their differences with two scenarios. The MA-DR estimator performs better in the presence of instruments, and the BAC estimator performs better in the presence of covariates that are weakly associated with the outcome.
