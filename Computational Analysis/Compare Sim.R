@@ -93,4 +93,6 @@ situation24_compare <- future_map(1:500, ~paper_sim(true_effect, n, p2, sigma2, 
   bind_rows()
 toc()
 
+situation23_compare %>% replications_visual(1)
 
+situation21_compare %>% replications_l1_bias(1)

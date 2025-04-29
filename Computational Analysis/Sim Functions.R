@@ -61,8 +61,8 @@ paper_sim <- function(true_effect, n, p, sigma, alpha, # propensity
         bac_coefs["Outcome", .x, , "X"] %>% as.vector()
       }) %>% list_c() %>% mean()
       
-      return(tibble("truth" = true_outcome_est, "prop" = prop_est, "outcome" = outcome_est,
-                    "DR" = dr_est, "MADR" = madr_est, "BAC" = bac_est))
+      return(tibble("GS" = true_outcome_est, "MS-E" = prop_est, "MS-O" = outcome_est,
+                    "MS-DR" = dr_est, "MA-DR" = madr_est, "BAC" = bac_est))
     }
   ))
   
@@ -158,17 +158,17 @@ complex_sim <- function(true_effect, n, p, sigma, alpha, # propensity
         bac_coefs_extra["Outcome", .x, , "X"] %>% as.vector()
       }) %>% list_c() %>% mean()
       
-      return(tibble("truth" = true_outcome_est, "prop" = prop_est, "outcome" = outcome_est,
-                    "DR" = dr_est, "MADR" = madr_est, "BAC" = bac_est,
-                    "prop_EXTRA" = prop_est_extra, "outcome_EXTRA" = outcome_est_extra,
-                    "DR_EXTRA" = dr_est_extra, "MADR_EXTRA" = madr_est_extra, "BAC_EXTRA" = bac_est_extra))
+      return(tibble("BAC" = bac_est, "GS" = true_outcome_est, "MS-E" = prop_est,
+                    "MS-O" = outcome_est, "MS-DR" = dr_est, "MA-DR" = madr_est,
+                    "MS-E-EXTRA" = prop_est_extra, "MS-O-EXTRA" = outcome_est_extra,
+                    "MS-DR-EXTRA" = dr_est_extra, "MA-DR-EXTRA" = madr_est_extra, "BAC-EXTRA" = bac_est_extra))
     }
   ))
   
-  tibble("truth" = true_outcome_est, "prop" = prop_est, "outcome" = outcome_est,
-         "DR" = dr_est, "MADR" = madr_est,
-         "prop_EXTRA" = prop_est_extra, "outcome_EXTRA" = outcome_est_extra,
-         "DR_EXTRA" = dr_est_extra, "MADR_EXTRA" = madr_est_extra)
+  tibble("GS" = true_outcome_est, "MS-E" = prop_est, "MS-O" = outcome_est,
+         "MS-DR" = dr_est, "MA-DR" = madr_est,
+         "MS-E-EXTRA" = prop_est_extra, "MS-O-EXTRA" = outcome_est_extra,
+         "MS-DR-EXTRA" = dr_est_extra, "MA-DR-EXTRA" = madr_est_extra)
 }
 
 dr_bac_sim <- function(true_effect, n, p, sigma, alpha, # propensity
@@ -195,7 +195,7 @@ dr_bac_sim <- function(true_effect, n, p, sigma, alpha, # propensity
     }) %>% list_c() %>% mean()
   ))
   
-  tibble("MADR" = madr_est, "BAC" = bac_est)
+  tibble("MA-DR" = madr_est, "BAC" = bac_est)
 }
 
 
@@ -203,14 +203,16 @@ dr_bac_sim <- function(true_effect, n, p, sigma, alpha, # propensity
 
 replications_mean <- function(df){
   df %>% group_by() %>%
-    summarize(across(everything(), ~mean(.x)))
+    summarize(across(everything(), ~mean(.x))) %>%
+    as.data.frame()
 }
 
 replications_l1_bias <- function(df, true_effect){
   df %>%
     mutate(across(everything(), ~abs(.x - true_effect))) %>%
     group_by() %>%
-    summarize(across(everything(), ~mean(.x)))
+    summarize(across(everything(), ~mean(.x))) %>%
+    as.data.frame()
 }
 
 replications_visual <- function(df, true_effect){
@@ -225,7 +227,7 @@ replications_visual <- function(df, true_effect){
     ggplot() +
     geom_point(aes(y = mean, x = method, color = method)) + 
     geom_errorbar(aes(ymin = lower, ymax = upper, x = method, color = method), width = .2) +
-    theme(legend.title = element_blank()) +
+    theme(legend.position = "none") +
     geom_hline(yintercept = true_effect, linetype = "dotted") +
     labs(x = "Method", y = "Estimated Effect")
 }

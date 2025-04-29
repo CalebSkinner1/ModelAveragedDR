@@ -12,8 +12,17 @@ sigma <- 1
 tic()
 plan(multisession, workers = 4)
 
-complex_sim_results <- future_map(1:500, ~complex_compare_sim(true_effect, n, p, sigma, include_BAC = TRUE),
+complex_sim_results <- future_map(1:500, ~complex_sim(true_effect, n, p, sigma, include_BAC = TRUE),
                                   .progress = TRUE,
                                   .options = furrr_options(seed = TRUE)) %>%
   bind_rows()
 toc()
+
+complex_sim_results <- complex_sim_results %>% rename_with(~str_replace(.x, "EXTRA", "X"))
+
+complex_sim_results %>% replications_visual(1)
+
+methods %>% factor(levels = c("GS", "MS-E", "MS-O", "MS-DR", "MA-DR", "BAC", "MS-E-X", "MS-O-X", "MS-DR-X", "MA-DR-X", "BAC-X"))
+
+
+
